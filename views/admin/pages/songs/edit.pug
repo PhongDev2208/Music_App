@@ -1,0 +1,116 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") #{pageTitle}
+
+  form(
+    action=`/${prefixAdmin}/songs/edit/${song._id}?_method=PATCH`
+    id="form-edit-song"
+    method="POST"
+    enctype="multipart/form-data"
+  )
+    div(class="form-group")
+      label(for="title") Tiêu đề
+      input(
+        type="text"
+        class="form-control"
+        id="title"
+        value=song.title
+        name="title"
+        required
+      )
+    div(class="form-group")
+      label(for="topic_id") Chủ đề
+      select(
+        name="topicId"
+        id="topic_id"
+        class="form-control"
+      )
+        option(value="") -- Chọn chủ đề --
+        each topic in topics
+          option(
+            value=topic._id
+            selected=topic._id == song.topicId
+          ) #{topic.title}
+    div(class="form-group")
+      label(for="singer_id") Ca sĩ
+      select(
+        name="singerId"
+        id="singer_id"
+        class="form-control"
+      )
+        option(value="") -- Chọn ca sĩ --
+        each singer in singers
+          option(
+            value=singer._id
+            selected=singer._id == song.singerId
+          ) #{singer.fullName}
+    div(class="form-group")
+      label(for="desc") Mô tả
+      textarea(
+        class="form-control"
+        id="desc"
+        name="description"
+        rows="5"
+        textarea-mce
+      ) !{song.description}
+    div(class="form-group" upload-image)
+      label(for="avatar") Ảnh
+      input(
+        type="file"
+        class="form-control-file"
+        id="avatar"
+        name="avatar"
+        accept="image/*"
+        upload-image-input
+      )
+      img(
+        src=song.avatar
+        class="image-preview"
+        upload-image-preview
+      )
+    div(class="form-group" upload-audio)
+      label(for="audio") File âm thanh
+      input(
+        type="file"
+        class="form-control-file"
+        id="audio"
+        name="audio"
+        accept="audio/*"
+        upload-audio-input
+      )
+      audio(controls upload-audio-play)
+        source(src=song.audio type="audio/mpeg")
+    div(class="form-group")
+      label(for="lyrics") Lời bài hát
+      textarea(
+        class="form-control"
+        id="lyrics"
+        name="lyrics"
+        rows="20"
+      ) #{song.lyrics}
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked=song.status == 'active'
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusInActive"
+        name="status"
+        value="inactive"
+        checked=song.status == 'inactive'
+      )
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Cập nhật
