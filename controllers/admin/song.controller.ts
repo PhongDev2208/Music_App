@@ -128,7 +128,7 @@ export const editPatch = async (req: Request, res: Response) => {
       status: "active",
     }, req.body);
 
-    res.redirect(`back`);
+    res.redirect('back');
   } catch (error) {
     console.log(error);
     res.redirect(`/`);
